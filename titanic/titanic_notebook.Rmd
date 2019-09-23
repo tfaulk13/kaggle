@@ -1,0 +1,75 @@
+---
+title: "titanic"
+author: "Todd Faulkenberry"
+date: "9/22/2019"
+output: html_document
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Introduction
+
+In this notebook, I apply foundational machine learning techniques to a sample of Titanic passengers in order to predict who survived and who did not based on their characteristics. [[[Add more here]]]
+
+
+[[[Table of Contents?]]]
+
+
+```{r libraries}
+library(tidyverse)
+library(caret)
+library(corrplot)
+
+file_path_train <- file.path('data', 'train.csv')
+file_path_test <- file.path('data', 'test.csv')
+
+train <- read_csv(file_path_train)
+test <- read_csv(file_path_test)
+```
+
+First, let's familiarize ourselves with data. Though Kaggle provides full data dictionary [here](https://www.kaggle.com/c/titanic/data), these tools will allow us to explore the data on our own. Glimpse(), Head(), and Summary() all provide a different perspective as we begin to understand the data. They also help us identify any irregularities in the data, such as null values or extreme values that could be inaccurate:
+
+### Understanding the Data
+
+```{r head}
+glimpse(train)
+head(train)
+summary(train)
+```
+
+Glimpse() lets us quickly see number of rows, columns, and the type of each variable in data. We see a unique ID (PassengerID), the binary classification we are trying to predict (Survived), as well as variables of different types:
+
+* Categorical: Pclass, Sex, Embarked
+* Quantitative: Age, Fare, SibSp, Parch
+
+In addition, we have Name, Ticket, and Cabin, which are text variables for identification.
+
+Head() shows the data in typical tabular form. Most striking is the null values we see for Age and Cabin. The other columns look pretty standard, though there's one (Embarked) that we cannot see.
+
+Summary() lets us dive further into the variables, especially quantative ones. For example, we can see the mean and median for for continuous Age, and Fare. In our training set, we now know the average age (`r mean(train$Age, na.rm = TRUE)`) and ticket price (`r mean(train$Fare, na.rm = TRUE)`). Additional, the mean of categorical like Survived tell us the percentage breakdown of that variable. So, in train, `r mean(train$Survived, na.rm = TRUE)` of passengers survived the crash. Additionally, we see that 177 observations are missing Age, something that we will deal with in data cleaning.
+
+[[[DO I need to add more?]]]
+
+### Data cleaning
+
+```{r}
+train$male <- as.numeric(train$Sex == "male")
+train$female <- as.numeric(train$Sex == "female")
+
+train$lower_class <- as.numeric(train$Pclass == 1)
+train$middle_class <- as.numeric(train$Pclass == 2)
+train$upper_class <- as.numeric(train$Pclass == 3)
+
+train$minor <- as.numeric(train$Age <= 18.00)
+train$senior <- as.numeric(train$Age >= 60.00)
+
+train$cherbourg <- as.numeric(train$Embarked == "C")
+train$queenstown <- as.numeric(train$Embarked == "Q")
+train$southampton <- as.numeric(train$Embarked == "S")
+```
+
+[[[Creating dummy variables]]]
+
+
