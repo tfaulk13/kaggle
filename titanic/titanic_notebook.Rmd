@@ -25,8 +25,8 @@ library(corrplot)
 file_path_train <- file.path('data', 'train.csv')
 file_path_test <- file.path('data', 'test.csv')
 
-train <- read_csv(file_path_train)
-test <- read_csv(file_path_test)
+train <- read_csv('data/train.csv')
+test <- read_csv('data/text.csv)
 ```
 
 First, let's familiarize ourselves with data. Though Kaggle provides full data dictionary [here](https://www.kaggle.com/c/titanic/data), these tools will allow us to explore the data on our own. Glimpse(), Head(), and Summary() all provide a different perspective as we begin to understand the data. They also help us identify any irregularities in the data, such as null values or extreme values that could be inaccurate:
