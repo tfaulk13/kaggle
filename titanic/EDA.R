@@ -48,8 +48,18 @@ train %>%
 
 # A few thing to note: 
 # Not many missing but most missing Pclass 2 and 3
-# Having a cabin number appears to have some impact for Pclass 1
+# Having a cabin number appears to have little impact for Pclass 1
 # It does for Pclass 2 and 3 but v small sample size
 
-# T test cabin vs non-cabin
+# Correlation: cabin vs non-cabin
 train$has_cabin <- if_else(is.na(train$cabin_level), 0, 1)
+cor(train$has_cabin, train$Survived)
+
+# Not strongly correlated at all...going to leave null for now but may revisit 
+# during feature engineering
+
+# Embarked -- only two people staying in same cabin...not going to worry
+# about them for now
+
+# Feature Engineering -----
+
